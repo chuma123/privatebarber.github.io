@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elite Cuts - Haircut Tracker</title>
+    <title>FADED - Haircut Tracker</title>
     <style>
         * {
             margin: 0;
@@ -219,8 +219,8 @@
         <!-- Login Screen -->
         <div id="loginScreen" class="login-screen">
             <div class="logo">
-                <h1>Elite Cuts</h1>
-                <p>Professional Barbering Services</p>
+                <h1>FADED</h1>
+                <p>Private Barbering Services</p>
             </div>
             <form id="loginForm">
                 <div class="form-group">
@@ -279,7 +279,14 @@
                 plan: 'Premium',
                 maxHaircuts: 5,
                 remaining: 3
-            }
+            },
+            'Daryl' : {
+               name: 'Daryl',
+               plan: 'standard',
+               maxHaircuts: 4,
+               remaining: 0
+
+            },
         };
 
         const CORRECT_PASSWORD = '12314';
@@ -350,7 +357,7 @@
                 </div>
                 <div class="controls">
                     <button class="btn-small" onclick="useHaircut('${clientId}')">Use Haircut</button>
-                    <button class="btn-small" onclick="addHaircut('${clientId}')">Add Haircut</button>
+                  <!-- <button class="btn-small" onclick="addHaircut('${clientId}')">Add Haircut</button> -->
                     <button class="btn-small" onclick="resetHaircuts('${clientId}')">Reset Month</button>
                 </div>
             `;
