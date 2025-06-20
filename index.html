@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elite Cuts - Haircut Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+        }
+
+        .login-screen, .main-app {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo h1 {
+            font-size: 2.5em;
+            color: #d4af37;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            margin-bottom: 10px;
+        }
+
+        .logo p {
+            color: #cccccc;
+            font-style: italic;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #d4af37;
+            font-weight: bold;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid rgba(212, 175, 55, 0.3);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #d4af37;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, #d4af37, #f4d03f);
+            color: #1a1a1a;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover {
+            background: linear-gradient(45deg, #f4d03f, #d4af37);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3);
+        }
+
+        .client-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .client-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .client-name {
+            font-size: 1.4em;
+            color: #d4af37;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .client-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .haircuts-remaining {
+            font-size: 1.2em;
+            color: #ffffff;
+        }
+
+        .plan-type {
+            background: linear-gradient(45deg, #d4af37, #f4d03f);
+            color: #1a1a1a;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-small {
+            flex: 1;
+            padding: 10px;
+            background: rgba(212, 175, 55, 0.2);
+            color: #d4af37;
+            border: 1px solid #d4af37;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .btn-small:hover {
+            background: #d4af37;
+            color: #1a1a1a;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .error {
+            color: #ff6b6b;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .logout-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 107, 107, 0.2);
+            color: #ff6b6b;
+            border: 1px solid #ff6b6b;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #ff6b6b;
+            color: #ffffff;
+        }
+
+        .main-app {
+            position: relative;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h2 {
+            color: #d4af37;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #cccccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Login Screen -->
+        <div id="loginScreen" class="login-screen">
+            <div class="logo">
+                <h1>Elite Cuts</h1>
+                <p>Professional Barbering Services</p>
+            </div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="password">Enter Password</label>
+                    <input type="password" id="password" placeholder="Password" required>
+                </div>
+                <button type="submit" class="btn">Login</button>
+                <div id="loginError" class="error hidden">Invalid password. Please try again.</div>
+            </form>
+        </div>
+
+        <!-- Main Application -->
+        <div id="mainApp" class="main-app hidden">
+            <button class="logout-btn" onclick="logout()">Logout</button>
+            
+            <div class="header">
+                <h2>Client Tracker</h2>
+                <p>Manage monthly haircut allowances</p>
+            </div>
+
+            <div id="clientList">
+                <!-- Client cards will be dynamically generated here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration - Edit these values to change haircut counts
+        const CLIENT_DATA = {
+            'Mr peter': {
+                name: 'Peter',
+                plan: 'Standard',
+                maxHaircuts: 4,
+                remaining: 2
+            },
+            'Mac Mashazi': {
+                name: 'Mac Mashazi',
+                plan: 'Premium',
+                maxHaircuts: 8,
+                remaining: 8
+            },
+            'Luvo': {
+                name: 'Luvo',
+                plan: 'Standard',
+                maxHaircuts: 4,
+                remaining: 2
+            },
+            'Lesegko': {
+                name: 'Lesegko',
+                plan: 'standard',
+                maxHaircuts: 4,
+                remaining: 1
+            },
+            'Themba': {
+                name: 'Themba',
+                plan: 'Premium',
+                maxHaircuts: 5,
+                remaining: 3
+            }
+        };
+
+        const CORRECT_PASSWORD = '12314';
+        let clientData = {...CLIENT_DATA};
+
+        // DOM Elements
+        const loginScreen = document.getElementById('loginScreen');
+        const mainApp = document.getElementById('mainApp');
+        const loginForm = document.getElementById('loginForm');
+        const passwordInput = document.getElementById('password');
+        const loginError = document.getElementById('loginError');
+        const clientList = document.getElementById('clientList');
+
+        // Event Listeners
+        loginForm.addEventListener('submit', handleLogin);
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const password = passwordInput.value;
+            
+            if (password === CORRECT_PASSWORD) {
+                showMainApp();
+            } else {
+                showError();
+            }
+        }
+
+        function showMainApp() {
+            loginScreen.classList.add('hidden');
+            mainApp.classList.remove('hidden');
+            renderClients();
+        }
+
+        function showError() {
+            loginError.classList.remove('hidden');
+            passwordInput.value = '';
+            passwordInput.focus();
+        }
+
+        function logout() {
+            mainApp.classList.add('hidden');
+            loginScreen.classList.remove('hidden');
+            passwordInput.value = '';
+            loginError.classList.add('hidden');
+        }
+
+        function renderClients() {
+            clientList.innerHTML = '';
+            
+            Object.keys(clientData).forEach(clientId => {
+                const client = clientData[clientId];
+                const clientCard = createClientCard(clientId, client);
+                clientList.appendChild(clientCard);
+            });
+        }
+
+        function createClientCard(clientId, client) {
+            const card = document.createElement('div');
+            card.className = 'client-card';
+            
+            card.innerHTML = `
+                <div class="client-name">${client.name}</div>
+                <div class="client-info">
+                    <div class="haircuts-remaining">
+                        <strong>${client.remaining}</strong> haircuts remaining
+                    </div>
+                    <div class="plan-type">${client.plan} Plan</div>
+                </div>
+                <div class="controls">
+                    <button class="btn-small" onclick="useHaircut('${clientId}')">Use Haircut</button>
+                    <button class="btn-small" onclick="addHaircut('${clientId}')">Add Haircut</button>
+                    <button class="btn-small" onclick="resetHaircuts('${clientId}')">Reset Month</button>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        function useHaircut(clientId) {
+            if (clientData[clientId].remaining > 0) {
+                clientData[clientId].remaining--;
+                renderClients();
+            }
+        }
+
+        function addHaircut(clientId) {
+            if (clientData[clientId].remaining < clientData[clientId].maxHaircuts) {
+                clientData[clientId].remaining++;
+                renderClients();
+            }
+        }
+
+        function resetHaircuts(clientId) {
+            clientData[clientId].remaining = clientData[clientId].maxHaircuts;
+            renderClients();
+        }
+
+        // Initialize
+        passwordInput.focus();
+    </script>
+</body>
+</html>
