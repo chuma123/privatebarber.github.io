@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FADED PRIVATE BARBER SERVICES</title>
+  <title>PRIVATE BARBER SERVICES</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -72,6 +72,7 @@
   <div id="user-dashboard" class="hidden">
     <h3>Welcome, <span id="user-name"></span></h3>
     <p>You have <span id="remaining-cuts"></span> haircuts left this month.</p>
+    <p>enjoy your day.</p>
     <button onclick="logout()">Logout</button>
   </div>
 
@@ -84,9 +85,9 @@
 
 <script>
   const users = {
-    'luvo': { password: '3430', totalCuts: 4, usedCuts: 2 },
+    'luvo': { password: '3430', totalCuts: 4, usedCuts: 3 },
     'peter': { password: '6882', totalCuts: 4, usedCuts: 2 },
-    'mac': { password: '4692', totalCuts: 8, usedCuts: 0 },
+    'mac': { password: '4692', totalCuts: 8, usedCuts: 1 },
   };
 
   const adminPassword = '12314';
