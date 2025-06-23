@@ -3,51 +3,73 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PRIVATE BARBER SERVICES</title>
-   
+  <title>Private Barber - Login</title>
+  <link rel="stylesheet" href="style.css" />
   <style>
+    /* Add your Figma CSS in style.css, or inline if needed */
     body {
-      font-family: Arial, sans-serif;
-      background: #111;
-      color: #f90;
       margin: 0;
-      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #111;
+      color: #f90;
     }
-    .container {
-      max-width: 500px;
-      margin: 50px auto;
+
+    .login-container {
+      max-width: 400px;
+      margin: 60px auto;
       padding: 20px;
       background: #222;
-      border-radius: 8px;
+      text-align: center;
+      border-radius: 10px;
       box-shadow: 0 0 15px rgba(255, 165, 0, 0.3);
     }
-    h2, h3 {
-      text-align: center;
-      color: #ffa500;
+
+    .logo {
+      width: 100px;
+      margin-bottom: 20px;
     }
+
+    .subtitle {
+      font-weight: normal;
+      color: #ffb733;
+    }
+
+    .instagram {
+      color: orange;
+      margin: 10px 0;
+    }
+
+    .login-box {
+      background: #333;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+
     input, button {
       width: 100%;
       padding: 10px;
       margin: 10px 0;
-      border: none;
       border-radius: 5px;
+      border: none;
       font-size: 16px;
     }
+
     input {
-      background: #333;
+      background: #444;
       color: #fff;
     }
+
     button {
-      background-color: #f90;
+      background: #f90;
       color: #111;
       cursor: pointer;
     }
-    button:hover {
-      background-color: #ffb733;
-    }
+
     .hidden {
       display: none;
     }
+
     .user-card {
       background: #333;
       padding: 10px;
@@ -55,118 +77,114 @@
       border-radius: 5px;
       color: #fff;
     }
-    input[type="number"] {
-      background-color: #222;
-      color: #f90;
-    }
   </style>
 </head>
 <body>
-<div class="container">
-  <h2> The fade journal </h2>
-  <p>
-  <p style="text-align: center;"><em></em>private barber services
-    <p style="text-align: center,"</p>
-    <a href="mailto:admin@elvisdesigns.co.za" style="display: inline-block; padding:5px 10px   ; background-color: orange; color: black; text-decoration: none;border-radius: 5px; ">mail
-    <p style="text-align: center,"></p>
-   <a href="https://www.instagram.com/chumaisme/" target="_blank" style="color:orange;">follow me on instagram</a>
-  <div id="login-section">
-    <input type="text" id="username" placeholder="Username" />
-    <input type="password" id="password" placeholder="Password" />
-    <button onclick="login()">Login</button>
+  <div class="login-container">
+    <img src="assets/logoelvis.png" alt="Logo" class="logo" />
+    <h1>Private Barber</h1>
+    <h2 class="subtitle">haircut tracker</h2>
+    <p class="instagram"><a href="https://www.instagram.com/chumaisme/" target="_blank" style="color:orange;">Follow me on Instagram</a></p>
+    <hr />
+
+    <!-- Login Section -->
+    <div id="login-section">
+      <input type="text" id="username" placeholder="Username" />
+      <input type="password" id="password" placeholder="Password" />
+      <button onclick="login()">Login</button>
+    </div>
+
+    <!-- User Dashboard -->
+    <div id="user-dashboard" class="hidden">
+      <h3>Welcome, <span id="user-name"></span></h3>
+      <p>You have <span id="remaining-cuts"></span> haircuts left this month.</p>
+      <p>Enjoy your day.</p>
+      <button onclick="logout()">Logout</button>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="admin-dashboard" class="hidden">
+      <h3>Admin Panel</h3>
+      <div id="user-list"></div>
+      <button onclick="logout()">Logout</button>
+    </div>
   </div>
 
-  <div id="user-dashboard" class="hidden">
-    <h3>Welcome, <span id="user-name"></span></h3>
-    <p>You have <span id="remaining-cuts"></span> haircuts left this month.</p>
-    <p>enjoy your day.</p>
-    <button onclick="logout()">Logout</button>
-  </div>
+  <!-- JS logic (unchanged) -->
+  <script>
+    const users = {
+      'luvo': { password: '3430', totalCuts: 4, usedCuts: 3 },
+      'peter': { password: '6882', totalCuts: 4, usedCuts: 2 },
+      'mac': { password: '4692', totalCuts: 8, usedCuts: 1 },
+      'lesego': {password: '5820', totalCuts: 4, usedCuts: 2},
+      'Daryl': {password: '6921', totalCuts: 4, usedCuts: 4},
+      'themba': {password: '9333', totalCuts: 5, usedCuts: 2},
+      'thendo': {password: '8920', totalCuts: 4, usedCuts: 3},
+      'mj': {password: '5434',totalCuts: 8, usedCuts: 8},
+    };
 
-  <div id="admin-dashboard" class="hidden">
-    <h3>Admin Panel</h3>
-    <div id="user-list"></div>
-    <button onclick="logout()">Logout</button>
-  </div>
-</div>
+    const adminPassword = '12314';
 
-<script>
-  const users = {
-    'luvo': { password: '3430', totalCuts: 4, usedCuts: 3 },
-    'peter': { password: '6882', totalCuts: 4, usedCuts: 2 },
-    'mac': { password: '4692', totalCuts: 8, usedCuts: 1 },
-    'lesego': {password: '5820', totalCuts: 4, usedCuts: 2},
-    'Daryl': {password: '6921', totalCuts: 4, usedCuts: 4},
-    'themba': {password: '9333', totalCuts: 5, usedCuts: 2},
-    'thendo': {password: '8920', totalCuts: 4, usedCuts: 3},
-    'mj': {password: '5434',totalCuts: 8, usedCuts: 8},
-    
-  };
+    function login() {
+      const uname = document.getElementById('username').value.toLowerCase();
+      const pword = document.getElementById('password').value;
 
-  const adminPassword = '12314';
-
-  function login() {
-    const uname = document.getElementById('username').value.toLowerCase();
-    const pword = document.getElementById('password').value;
-
-    if (uname === 'admin' && pword === adminPassword) {
-      showAdminDashboard();
-    } else if (users[uname] && users[uname].password === pword) {
-      showUserDashboard(uname);
-    } else {
-      alert('Invalid login credentials');
+      if (uname === 'admin' && pword === adminPassword) {
+        showAdminDashboard();
+      } else if (users[uname] && users[uname].password === pword) {
+        showUserDashboard(uname);
+      } else {
+        alert('Invalid login credentials');
+      }
     }
-  }
 
-  function showUserDashboard(username) {
-    document.getElementById('login-section').classList.add('hidden');
-    document.getElementById('user-dashboard').classList.remove('hidden');
-    document.getElementById('user-name').textContent = username;
-    const remaining = users[username].totalCuts - users[username].usedCuts;
-    document.getElementById('remaining-cuts').textContent = remaining;
-  }
-
-  function showAdminDashboard() {
-    document.getElementById('login-section').classList.add('hidden');
-    document.getElementById('admin-dashboard').classList.remove('hidden');
-    const list = document.getElementById('user-list');
-    list.innerHTML = '';
-
-    for (const user in users) {
-      const data = users[user];
-      const card = document.createElement('div');
-      card.className = 'user-card';
-      card.innerHTML = `
-        <strong>${user}</strong><br>
-        Total Haircuts: <input type="number" value="${data.totalCuts}" id="total-${user}" /><br>
-        Used Haircuts: <input type="number" value="${data.usedCuts}" id="used-${user}" /><br>
-        <button onclick="updateUser('${user}')">Update</button>
-      `;
-      list.appendChild(card);
+    function showUserDashboard(username) {
+      document.getElementById('login-section').classList.add('hidden');
+      document.getElementById('user-dashboard').classList.remove('hidden');
+      document.getElementById('user-name').textContent = username;
+      const remaining = users[username].totalCuts - users[username].usedCuts;
+      document.getElementById('remaining-cuts').textContent = remaining;
     }
-  }
 
-  function updateUser(user) {
-    const newTotal = parseInt(document.getElementById(`total-${user}`).value);
-    const newUsed = parseInt(document.getElementById(`used-${user}`).value);
-    if (newUsed <= newTotal) {
-      users[user].totalCuts = newTotal;
-      users[user].usedCuts = newUsed;
-      alert(`Updated ${user}'s haircut info.`);
-    } else {
-      alert('Used haircuts cannot exceed total haircuts.');
+    function showAdminDashboard() {
+      document.getElementById('login-section').classList.add('hidden');
+      document.getElementById('admin-dashboard').classList.remove('hidden');
+      const list = document.getElementById('user-list');
+      list.innerHTML = '';
+
+      for (const user in users) {
+        const data = users[user];
+        const card = document.createElement('div');
+        card.className = 'user-card';
+        card.innerHTML = `
+          <strong>${user}</strong><br>
+          Total Haircuts: <input type="number" value="${data.totalCuts}" id="total-${user}" /><br>
+          Used Haircuts: <input type="number" value="${data.usedCuts}" id="used-${user}" /><br>
+          <button onclick="updateUser('${user}')">Update</button>
+        `;
+        list.appendChild(card);
+      }
     }
-  }
 
-  function logout() {
-    document.getElementById('login-section').classList.remove('hidden');
-    document.getElementById('user-dashboard').classList.add('hidden');
-    document.getElementById('admin-dashboard').classList.add('hidden');
-    document.getElementById('username').value = '';
-    document.getElementById('password').value = '';
-  }
-</script>
+    function updateUser(user) {
+      const newTotal = parseInt(document.getElementById(`total-${user}`).value);
+      const newUsed = parseInt(document.getElementById(`used-${user}`).value);
+      if (newUsed <= newTotal) {
+        users[user].totalCuts = newTotal;
+        users[user].usedCuts = newUsed;
+        alert(`Updated ${user}'s haircut info.`);
+      } else {
+        alert('Used haircuts cannot exceed total haircuts.');
+      }
+    }
+
+    function logout() {
+      document.getElementById('login-section').classList.remove('hidden');
+      document.getElementById('user-dashboard').classList.add('hidden');
+      document.getElementById('admin-dashboard').classList.add('hidden');
+      document.getElementById('username').value = '';
+      document.getElementById('password').value = '';
+    }
+  </script>
 </body>
 </html>
-
-
