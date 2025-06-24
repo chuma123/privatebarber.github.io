@@ -4,16 +4,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Private Barber - Login</title>
-  
+
   <!-- Flatpickr Calendar -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-  
+
   <!-- EmailJS SDK -->
-  <script src="https://cdn.emailjs.com/sdk/3.2.0/email.min.js"></script>
-  <script>
-    (function(){
-      emailjs.init("FNjFdoQHnPUtjkY_g"); // <-- Replace with your EmailJS User ID
+  <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <script type="text/javascript">
+    (function() {
+      emailjs.init("FNjFdoQHnPUtjkY_g"); // Replace with your EmailJS Public Key
     })();
   </script>
 
@@ -25,7 +25,6 @@
       background-color: #000000;
       color: #f90;
     }
-
     .login-container {
       max-width: 400px;
       margin: 60px auto;
@@ -35,31 +34,25 @@
       border-radius: 10px;
       box-shadow: 0 0 15px rgba(255, 165, 0, 0.3);
     }
-
     .logo {
       width: 100px;
       margin-bottom: 20px;
     }
-
     .subtitle {
       font-weight: normal;
       color: #ffb733;
     }
-
     .instagram {
       color: white;
       margin: 10px 0;
     }
-
     .login-box {
       background: #333;
       padding: 15px;
       border-radius: 8px;
       margin-bottom: 15px;
     }
-
-    input,
-    button {
+    input, button {
       width: 100%;
       padding: 10px;
       margin: 10px 0;
@@ -67,22 +60,18 @@
       border: none;
       font-size: 16px;
     }
-
     input {
       background: #444;
       color: #fff;
     }
-
     button {
       background: #f90;
       color: #111;
       cursor: pointer;
     }
-
     .hidden {
       display: none;
     }
-
     .user-card {
       background: #333;
       padding: 10px;
@@ -116,7 +105,6 @@
       <p>Your next booked haircut: <span id="next-date">None</span></p>
       <button onclick="openDatePicker()">📅 Choose Date</button>
       <input type="text" id="datepicker" class="hidden" />
-
       <button onclick="logout()">Logout</button>
     </div>
 
@@ -124,24 +112,27 @@
     <div id="admin-dashboard" class="hidden">
       <h3>Admin Panel</h3>
       <div id="user-list"></div>
+      <h4>Bookings:</h4>
+      <ul id="admin-bookings"></ul>
       <button onclick="logout()">Logout</button>
     </div>
   </div>
 
   <script>
     const users = {
-      luvo: { password: '3430', totalCuts: 4, usedCuts: 3, email: 'luvo@example.com', bookingDate: null },
-      peter: { password: '6882', totalCuts: 4, usedCuts: 2, email: 'peter@example.com', bookingDate: null },
-      mac: { password: '4692', totalCuts: 8, usedCuts: 1, email: 'mac@example.com', bookingDate: null },
-      lesego: { password: '5820', totalCuts: 4, usedCuts: 2, email: 'lesego@example.com', bookingDate: null },
-      daryl: { password: '6921', totalCuts: 4, usedCuts: 4, email: 'daryl@example.com', bookingDate: null },
-      themba: { password: '9333', totalCuts: 5, usedCuts: 2, email: 'themba@example.com', bookingDate: null },
-      thendo: { password: '8920', totalCuts: 4, usedCuts: 3, email: 'thendo@example.com', bookingDate: null },
-      mj: { password: '5434', totalCuts: 8, usedCuts: 8, email: 'mj@example.com', bookingDate: null }
+      'luvo': { password: '3430', totalCuts: 4, usedCuts: 3 },
+      'peter': { password: '6882', totalCuts: 4, usedCuts: 2 },
+      'mac': { password: '4692', totalCuts: 8, usedCuts: 1 },
+      'lesego': { password: '5820', totalCuts: 4, usedCuts: 2 },
+      'daryl': { password: '6921', totalCuts: 4, usedCuts: 4 },
+      'themba': { password: '9333', totalCuts: 5, usedCuts: 2 },
+      'thendo': { password: '8920', totalCuts: 4, usedCuts: 3 },
+      'mj': { password: '5434', totalCuts: 8, usedCuts: 8 }
     };
 
     const adminPassword = '12314';
-    let loggedInUser = null;
+    let loggedInUser = '';
+    const bookings = [];
 
     function login() {
       const uname = document.getElementById('username').value.toLowerCase();
@@ -161,11 +152,8 @@
       document.getElementById('login-section').classList.add('hidden');
       document.getElementById('user-dashboard').classList.remove('hidden');
       document.getElementById('user-name').textContent = username;
-
-      const user = users[username];
-      const remaining = user.totalCuts - user.usedCuts;
+      const remaining = users[username].totalCuts - users[username].usedCuts;
       document.getElementById('remaining-cuts').textContent = remaining;
-      document.getElementById('next-date').textContent = user.bookingDate || 'None';
 
       const today = new Date();
       const nextReset = new Date(today.getFullYear(), today.getMonth() + 1, 1);
@@ -179,21 +167,21 @@
       document.getElementById('admin-dashboard').classList.remove('hidden');
       const list = document.getElementById('user-list');
       list.innerHTML = '';
-
       for (const user in users) {
         const data = users[user];
-        const booking = data.bookingDate ? data.bookingDate : 'No booking';
         const card = document.createElement('div');
         card.className = 'user-card';
         card.innerHTML = `
           <strong>${user}</strong><br>
           Total Haircuts: <input type="number" value="${data.totalCuts}" id="total-${user}" /><br>
           Used Haircuts: <input type="number" value="${data.usedCuts}" id="used-${user}" /><br>
-          Booking Date: ${booking}<br>
           <button onclick="updateUser('${user}')">Update</button>
         `;
         list.appendChild(card);
       }
+
+      const bookingList = document.getElementById('admin-bookings');
+      bookingList.innerHTML = bookings.map(b => `<li>${b.user} booked for ${b.date}</li>`).join('');
     }
 
     function updateUser(user) {
@@ -209,7 +197,6 @@
     }
 
     function logout() {
-      loggedInUser = null;
       document.getElementById('login-section').classList.remove('hidden');
       document.getElementById('user-dashboard').classList.add('hidden');
       document.getElementById('admin-dashboard').classList.add('hidden');
@@ -224,29 +211,29 @@
       flatpickr(picker, {
         minDate: "today",
         dateFormat: "Y-m-d",
-        onChange: function (selectedDates, dateStr) {
+        onChange: function(selectedDates, dateStr) {
           document.getElementById('next-date').textContent = dateStr;
           picker.classList.add('hidden');
+          bookings.push({ user: loggedInUser, date: dateStr });
 
-          if (loggedInUser) {
-            users[loggedInUser].bookingDate = dateStr;
-
-            // Send booking notification email
-            emailjs.send('service_7e5ricc', 'template_acm9lum', {
-              user_name: loggedInUser,
-              booking_date: dateStr
-            })
-            .then(function() {
-              alert('Booking confirmed! You will receive an email notification.');
-            }, function(error) {
-              alert('Failed to send email: ' + JSON.stringify(error));
-            });
-          }
+          // Send email via EmailJS
+          emailjs.send('service_qzzkmeo', 'template_acm9lum', {
+            user_name: loggedInUser,
+            booking_date: dateStr,
+            to_email: 'admin@elvisdesigns.co.za' 
+          })
+          .then(() => {
+            alert('Booking confirmed! Email sent.');
+          }, (error) => {
+            console.error('EmailJS error:', error);
+            alert('Failed to send booking email.');
+          });
         }
       });
     }
   </script>
 </body>
 </html>
+
 
 
