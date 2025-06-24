@@ -4,16 +4,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Private Barber - Login</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <link rel="stylesheet" href="style.css" />
   <style>
-    /* Add your Figma CSS in style.css, or inline if needed */
     body {
       margin: 0;
       font-family: Arial, sans-serif;
       background-color: #000000;
       color: #f90;
     }
-
     .login-container {
       max-width: 400px;
       margin: 60px auto;
@@ -21,31 +21,26 @@
       background: #000000;
       text-align: center;
       border-radius: 10px;
-      box-shadow: 0 0 15px (255, 165, 0, 0.3);
+      box-shadow: 0 0 15px rgba(255, 165, 0, 0.3);
     }
-
     .logo {
       width: 100px;
       margin-bottom: 20px;
     }
-
     .subtitle {
       font-weight: normal;
       color: #ffb733;
     }
-
     .instagram {
       color: white;
       margin: 10px 0;
     }
-
     .login-box {
       background: #333;
       padding: 15px;
       border-radius: 8px;
       margin-bottom: 15px;
     }
-
     input, button {
       width: 100%;
       padding: 10px;
@@ -54,28 +49,34 @@
       border: none;
       font-size: 16px;
     }
-
     input {
       background: #444;
       color: #fff;
     }
-
     button {
       background: #f90;
       color: #111;
       cursor: pointer;
     }
-
     .hidden {
       display: none;
     }
-
     .user-card {
       background: #333;
       padding: 10px;
       margin: 10px 0;
       border-radius: 5px;
       color: #fff;
+    }
+    #reminder a {
+      display: inline-block;
+      background-color: #25D366;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: bold;
+      margin-top: 10px;
     }
   </style>
 </head>
@@ -87,22 +88,29 @@
     <p class="instagram"><a href="https://www.instagram.com/chumaisme/" target="_blank" style="color:white;">Follow me on Instagram</a></p>
     <hr />
 
-    <!-- Login Section -->
     <div id="login-section">
       <input type="text" id="username" placeholder="Username" />
       <input type="password" id="password" placeholder="Password" />
       <button onclick="login()">Login</button>
     </div>
 
-    <!-- User Dashboard -->
     <div id="user-dashboard" class="hidden">
       <h3>Welcome, <span id="user-name"></span></h3>
       <p>You have <span id="remaining-cuts"></span> haircuts left this month.</p>
+      <p><span id="reset-countdown"></span></p>
       <p>Enjoy your day.</p>
+      <p>Your next booked haircut: <span id="next-date">None</span></p>
+      <button onclick="openDatePicker()">🗓 Choose Date</button>
+      <button onclick="cancelBooking()">❌ Cancel Booking</button>
+      <input type="text" id="datepicker" class="hidden" />
+      <div id="reminder"></div>
+      <div id="history-section">
+        <h4>Haircut History:</h4>
+        <ul id="history-list"></ul>
+      </div>
       <button onclick="logout()">Logout</button>
     </div>
 
-    <!-- Admin Dashboard -->
     <div id="admin-dashboard" class="hidden">
       <h3>Admin Panel</h3>
       <div id="user-list"></div>
@@ -110,7 +118,6 @@
     </div>
   </div>
 
-  <!-- JS logic (unchanged) -->
   <script>
     const users = {
       'luvo': { password: '3430', totalCuts: 4, usedCuts: 3 },
@@ -142,8 +149,42 @@
       document.getElementById('login-section').classList.add('hidden');
       document.getElementById('user-dashboard').classList.remove('hidden');
       document.getElementById('user-name').textContent = username;
+
       const remaining = users[username].totalCuts - users[username].usedCuts;
       document.getElementById('remaining-cuts').textContent = remaining;
+
+      const today = new Date();
+      const nextReset = new Date(today.getFullYear(), today.getMonth() + 1, 1);
+      const diffTime = nextReset - today;
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      document.getElementById('reset-countdown').textContent = `Your subscription resets in ${diffDays} day${diffDays !== 1 ? 's' : ''}.`;
+
+      const savedDate = localStorage.getItem(`nextCutDate_${username}`);
+      if (savedDate) {
+        document.getElementById('next-date').textContent = savedDate;
+      } else {
+        document.getElementById('next-date').textContent = "None";
+      }
+
+      const history = JSON.parse(localStorage.getItem(`history_${username}`)) || [];
+      const historyList = document.getElementById('history-list');
+      historyList.innerHTML = '';
+      history.forEach(date => {
+        const li = document.createElement('li');
+        li.textContent = date;
+        historyList.appendChild(li);
+      });
+
+      checkReminder(username);
+    }
+
+    function cancelBooking() {
+      const username = document.getElementById('user-name').textContent;
+      if (confirm("Are you sure you want to cancel your booking?")) {
+        localStorage.removeItem(`nextCutDate_${username}`);
+        document.getElementById('next-date').textContent = "None";
+        document.getElementById('reminder').innerHTML = '';
+      }
     }
 
     function showAdminDashboard() {
@@ -184,7 +225,71 @@
       document.getElementById('admin-dashboard').classList.add('hidden');
       document.getElementById('username').value = '';
       document.getElementById('password').value = '';
+      document.getElementById('next-date').textContent = "None";
+      document.getElementById('reminder').innerHTML = '';
+    }
+
+    function openDatePicker() {
+      const picker = document.getElementById('datepicker');
+      picker.classList.remove('hidden');
+
+      flatpickr(picker, {
+        minDate: "today",
+        dateFormat: "Y-m-d",
+        onChange: function(selectedDates, dateStr) {
+          if (!dateStr) return;
+          document.getElementById('next-date').textContent = dateStr;
+          picker.classList.add('hidden');
+
+          const username = document.getElementById('user-name').textContent;
+          localStorage.setItem(`nextCutDate_${username}`, dateStr);
+
+          let history = JSON.parse(localStorage.getItem(`history_${username}`)) || [];
+          history.push(dateStr);
+          localStorage.setItem(`history_${username}`, JSON.stringify(history));
+
+          checkReminder(username);
+        },
+        onClose: function() {
+          picker.classList.add('hidden');
+        }
+      }).open();
+    }
+
+    function checkReminder(username) {
+      const reminderArea = document.getElementById('reminder');
+      const bookedDateStr = localStorage.getItem(`nextCutDate_${username}`);
+      if (!bookedDateStr) {
+        reminderArea.innerHTML = '';
+        return;
+      }
+
+      const bookedDate = new Date(bookedDateStr);
+      const today = new Date();
+
+      bookedDate.setHours(0,0,0,0);
+      today.setHours(0,0,0,0);
+
+      const diffDays = Math.round((bookedDate - today) / (1000 * 60 * 60 * 24));
+
+      if (diffDays === 1) {
+        const userEmail = "client@email.com";
+
+        reminderArea.innerHTML = `
+          <p style="color: #a0ffa0;">Reminder: Your haircut is tomorrow!</p>
+          <a href="mailto:${userEmail}?subject=Haircut Reminder&body=Hi! This is a reminder that your haircut is tomorrow with Private Barber." target="_blank">
+            📧 Send Email Reminder
+          </a>
+          <br/>
+          <a href="sms:+27000000000?body=Reminder: Your haircut is tomorrow with Private Barber.">
+            📱 Send SMS Reminder
+          </a>
+        `;
+      } else {
+        reminderArea.innerHTML = '';
+      }
     }
   </script>
 </body>
 </html>
+
