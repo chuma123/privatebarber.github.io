@@ -1,87 +1,77 @@
-/* Base styles */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background-color: #000;
-  color: #f90;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-}
-
-/* Login container */
-.login-container {
-  width: 100%;
-  max-width: 400px;
-  padding: 20px;
-  background: #111;
-  text-align: center;
-  border-radius: 10px;
-  box-shadow: 0 0 15px rgba(255, 165, 0, 0.3);
-}
-
-/* Headings and text */
-h1 {
-  font-size: 24px;
-  margin: 10px 0;
-}
-.subtitle {
-  color: white;
-  margin-bottom: 10px;
-}
-.instagram {
-  color: #ccc;
-  font-size: 14px;
-  margin-bottom: 10px;
-}
-hr {
-  border: 0.5px solid #555;
-  margin: 20px 0;
-}
-
-/* Inputs and buttons */
-input,
-button {
-  display: block;
-  width: 100%;
-  box-sizing: border-box;
-  padding: 12px;
-  margin: 10px 0;
-  border-radius: 8px;
-  border: none;
-  font-size: 16px;
-  background-color: #222;
+  background-color: #355e00;
   color: #fff;
-  transition: background-color 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  text-align: center;
 }
-input::placeholder {
-  color: #aaa;
+
+.container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 20px;
 }
+
+.logo {
+  width: 80%;
+  max-width: 200px;
+  margin: 0 auto 20px;
+  border-radius: 12px;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #fff;
+  margin-top: 10px;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  border-radius: 10px;
+  border: none;
+  font-size: 1rem;
+}
+
 button {
+  padding: 12px;
   background-color: #f90;
   color: #111;
+  border: none;
+  border-radius: 10px;
   font-weight: bold;
-}
-button:hover {
-  background-color: #ffb733;
+  cursor: pointer;
 }
 
-/* Admin and user cards */
-.user-card {
-  background: #1a1a1a;
-  padding: 15px;
-  margin: 10px 0;
+.gallery-images img {
+  width: 100%;
+  margin-bottom: 15px;
   border-radius: 8px;
-  color: #fff;
-  box-shadow: 0 4px 10px rgba(255, 165, 0, 0.1);
 }
 
-/* Links */
-.login-link {
-  color: orange;
+.nav-bar {
+  display: flex;
+  justify-content: space-around;
+  background: #d3f90c;
+  padding: 10px 0;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+
+.nav-bar a {
   text-decoration: none;
-  font-weight: bold;
-  font-size: 14px;
+  color: #000;
+  font-size: 1.5rem;
 }
 
+.nav-bar a.active {
+  font-weight: bold;
+  color: #355e00;
+}

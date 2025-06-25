@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login | Private Barber</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+</head>
+<body class="login">
+  <div class="container login-box">
+    <img src="images/logo.png" alt="Logo" class="logo" />
+
+    <!-- Login Form -->
+    <div id="login-form">
+      <input type="text" id="username" placeholder="username" />
+      <input type="password" id="password" placeholder="password" />
+      <button onclick="login()">Login</button>
+    </div>
+
+    <!-- User Dashboard -->
+    <div id="user-dashboard" class="hidden">
+      <h3>Welcome, <span id="user-name"></span></h3>
+      <p>You have <span id="remaining-cuts"></span> cuts left this month.</p>
+      <p><span id="reset-countdown"></span></p>
+      <p>Your next booking: <span id="next-date">None</span></p>
+      <button onclick="openDatePicker()">📅 Book</button>
+      <input type="text" id="datepicker" class="hidden" />
+      <button onclick="logout()">Logout</button>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="admin-dashboard" class="hidden">
+      <h3>Admin Panel</h3>
+      <div id="user-list"></div>
+      <ul id="admin-bookings"></ul>
+      <button onclick="logout()">Logout</button>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <div class="nav-bar">
+    <a href="index.html">🏠</a>
+    <a href="gallery.html">📷</a>
+    <a href="login.html" class="active">🔐</a>
+  </div>
+
+  <!-- JavaScript Logic -->
+  <script src="script.js"></script>
+</body>
+</html>
+
