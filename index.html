@@ -26,13 +26,16 @@
       color: #f90;
     }
     .login-container {
-      max-width: 400px;
-      margin: 60px auto;
-      padding: 20px;
-      background: #000000;
-      text-align: center;
-      border-radius: 10px;
-      box-shadow: 0 0 15px rgba(255, 165, 0, 0.3);
+      .login-container {
+  width: 100%;
+  max-width: 400px;
+  padding: 25px 20px;
+  background: #111;
+  text-align: center;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(255, 165, 0, 0.15);
+}
+
     }
     .logo {
       width: 100px;
@@ -53,12 +56,31 @@
       margin-bottom: 15px;
     }
     input, button {
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      border-radius: 5px;
-      border: none;
-      font-size: 16px;
+      input, button {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: none;
+  font-size: 16px;
+  background-color: #222;
+  color: #fff;
+  transition: background-color 0.3s ease;
+}
+input::placeholder {
+  color: #aaa;
+}
+button {
+  background-color: #f90;
+  color: #111;
+  font-weight: bold;
+}
+button:hover {
+  background-color: #ffb733;
+}
+
     }
     input {
       background: #444;
@@ -83,7 +105,7 @@
 </head>
 <body>
   <div class="login-container">
-    <img src="logoelvis.png" alt="Logo" class="logo" />
+    
     <h1>Private Barber</h1>
     <h4 class="subtitle">haircut tracker</h4>
     <p class="instagram"><a href="https://www.instagram.com/chumaisme/" target="_blank" style="color:white;">Follow me on Instagram</a></p>

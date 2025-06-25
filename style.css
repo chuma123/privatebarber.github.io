@@ -1,60 +1,83 @@
+/* Base styles */
 body {
   margin: 0;
-  padding: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #2b2b2b;
-  color: white;
+  font-family: Arial, sans-serif;
+  background-color: #000;
+  color: #f90;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
 }
 
+/* Login container */
 .login-container {
-  background-color: #1a1a1a;
-  padding: 40px 30px;
-  border-radius: 10px;
-  width: 90%;
-  max-width: 360px;
+  width: 100%;
+  max-width: 400px;
+  padding: 20px;
+  background: #111;
   text-align: center;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(255, 165, 0, 0.3);
 }
 
-.logo {
-  width: 100px;
-  margin-bottom: 20px;
-}
-
+/* Headings and text */
 h1 {
   font-size: 24px;
   margin: 10px 0;
 }
-
 .subtitle {
   color: white;
   margin-bottom: 10px;
 }
-
 .instagram {
   color: #ccc;
   font-size: 14px;
   margin-bottom: 10px;
 }
-
 hr {
   border: 0.5px solid #555;
   margin: 20px 0;
 }
 
-.login-box {
-  background-color: #e0e0e0;
-  color: black;
-  border-radius: 10px;
-  padding: 15px;
-  text-align: left;
-  font-size: 14px;
-  margin-bottom: 20px;
+/* Inputs and buttons */
+input,
+button {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: none;
+  font-size: 16px;
+  background-color: #222;
+  color: #fff;
+  transition: background-color 0.3s ease;
+}
+input::placeholder {
+  color: #aaa;
+}
+button {
+  background-color: #f90;
+  color: #111;
+  font-weight: bold;
+}
+button:hover {
+  background-color: #ffb733;
 }
 
+/* Admin and user cards */
+.user-card {
+  background: #1a1a1a;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 8px;
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(255, 165, 0, 0.1);
+}
+
+/* Links */
 .login-link {
   color: orange;
   text-decoration: none;
