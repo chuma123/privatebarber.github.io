@@ -2,31 +2,119 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Haircut Gallery</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gallery | FADED</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      background-color: #000;
+      color: #0f0;
+      font-family: 'Arial', sans-serif;
+      padding: 20px;
+      margin: 0;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #0f0;
+    }
+
+    .gallery {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .gallery-item {
+      text-align: center;
+      transition: transform 0.2s ease;
+    }
+
+    .gallery-item img {
+      width: 150px;
+      border-radius: 15px;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .gallery-item img:hover {
+      transform: scale(1.05); /* Zoom in on hover */
+    }
+
+    .gallery-item.clicked img {
+      transform: scale(0.9); /* Zoom out on click */
+    }
+
+    .info-box {
+      display: none;
+      background: #111;
+      border: 1px solid #333;
+      padding: 10px;
+      border-radius: 12px;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    .info-box h3 {
+      margin: 5px 0;
+      color: #0f0;
+    }
+
+    .info-box p {
+      margin: 0;
+      color: #ccc;
+    }
+  </style>
 </head>
-<body class="gallery">
-  <div class="container gallery-images">
-    <img src="images/cut1.jpg" alt="Cut 1" />
-    <img src="images/cut2.jpg" alt="Cut 2" />
-    <img src="images/cut3.jpg" alt="Cut 3" />
-    <img src="images/cut7.jpg" alt="cut 7" />
-    <img src="images/cut8.jpg" alt="cut 8" />
-    <img src="images/cut9.jpg" alt="cut 9" />
-    <img src="images/cut10.jpg" alt="cut 10" />
-    <img src="images/cut11.jpg" alt="cut 11" />
-    <img src="images/cut12.jpg" alt="cut 12" />
-    <img src="images/cut13.jpg" alt="cut 13" /> 
+<body>
+
+  <h2>Haircut Gallery</h2>
+
+  <div class="gallery">
+    <div class="gallery-item" onclick="toggleInfo(this)">
+      <img src="images/cut12.jpg" alt="Tapper Fade">
+      <div class="info-box">
+        <h3>Tapper Fade</h3>
+        <p>A clean Tapper fade, sharp edges and neat finish.</p>
+        <p>Price - R120</p>
+      </div>
+    </div>
+
+    <div class="gallery-item" onclick="toggleInfo(this)">
+      <img src="images/cut8.jpg" alt="Mid Fade">
+      <div class="info-box">
+        <h3>Mid Fade</h3>
+        <p>Balanced mid fade with a smooth blend and texture.</p>
+        <P>Price - R120</P>
+      </div>
+    </div>
+
+    <div class="gallery-item" onclick="toggleInfo(this)">
+      <img src="images/cut9.jpg" alt="High Tapper Fade">
+      <div class="info-box">
+        <h3>High Tapper Fade</h3>
+        <p>Bold high Tapper fade for a standout, confident look.</p>
+        <p>Price - R120</p>
+      </div>
+    </div>
   </div>
-  <div class="nav-bar">
-    <a href="index.html">🏠</a>
-    <a href="gallery.html" class="active">📷</a>
-    <a href="login.html">🔐</a>
-  </div>
+
+  <script>
+    function toggleInfo(element) {
+      // First remove 'clicked' class and hide info from all items
+      document.querySelectorAll('.gallery-item').forEach(item => {
+        item.classList.remove('clicked');
+        item.querySelector('.info-box').style.display = 'none';
+      });
+
+      // Then show info on the clicked one
+      element.classList.add('clicked');
+      const infoBox = element.querySelector('.info-box');
+      infoBox.style.display = 'block';
+    }
+  </script>
+
 </body>
 </html>
-
-
-
-
