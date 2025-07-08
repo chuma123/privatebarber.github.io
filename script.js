@@ -1,4 +1,4 @@
-// Sample user data
+// ==== CONFIG ====
 const users = {
   luvo: { password: "3430", haircuts: 4, used: 1, nextBooking: null },
   peter: { password: "6882", haircuts: 4, used: 1, nextBooking: null },
@@ -8,19 +8,35 @@ const users = {
   daryl: { password: "6921", haircuts: 4, used: 1, nextBooking: null },
   mj: { password: "5434", haircuts: 8, used: 2, nextBooking: null },
 };
-
 const adminPassword = "12314";
+
+// ==== STATE ====
 let loggedInUser = null;
 let pickerInstance = null;
 
-document.addEventListener('DOMContentLoaded', function () {
+// ==== INITIALIZATION ====
+document.addEventListener("DOMContentLoaded", () => {
+  emailjs.init("vUTSYPKhBVAZIVaJc"); // Your actual EmailJS public key here
+
   switchView("login");
   localStorage.removeItem("loggedInUser");
   loggedInUser = null;
+
   addEnterKeySupport();
   clearDashboardContent();
+
+  // Contact form submit handler (if you have a contact form with id="contact-form")
+  const contactForm = document.getElementById("contact-form");
+  if (contactForm) {
+    contactForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      sendEmail();
+      this.reset();
+    });
+  }
 });
 
+// ==== LOGIN / LOGOUT ====
 function login() {
   const usernameInput = document.getElementById("username");
   const passwordInput = document.getElementById("password");
@@ -47,6 +63,13 @@ function login() {
   } else if (users[uname] && users[uname].password === pword) {
     loggedInUser = uname;
     localStorage.setItem("loggedInUser", loggedInUser);
+
+    // Restore stored booking from localStorage
+    const savedBooking = localStorage.getItem(`booking_${uname}`);
+    if (savedBooking) {
+      users[uname].nextBooking = savedBooking;
+    }
+
     startCountdown();
     switchView("user");
     clearLoginForm();
@@ -66,11 +89,11 @@ function logout() {
 function clearLoginForm() {
   const usernameInput = document.getElementById("username");
   const passwordInput = document.getElementById("password");
-
   if (usernameInput) usernameInput.value = "";
   if (passwordInput) passwordInput.value = "";
 }
 
+// ==== VIEW SWITCHING ====
 function switchView(view) {
   const loginForm = document.getElementById("login-form");
   const userDashboard = document.getElementById("user-dashboard");
@@ -91,6 +114,7 @@ function switchView(view) {
   }
 }
 
+// ==== DASHBOARDS ====
 function showUserDashboard(username) {
   if (!users[username]) return;
 
@@ -99,8 +123,14 @@ function showUserDashboard(username) {
 
   document.getElementById("user-name").innerText = username;
   document.getElementById("remaining-cuts").innerText = remaining;
-  document.getElementById("next-date").innerText = user.nextBooking || "None";
 
+  if (user.nextBooking) {
+    document.getElementById("next-date").innerText = user.nextBooking;
+  } else {
+    document.getElementById("next-date").innerText = "None";
+  }
+
+  // Hide the datepicker initially
   const datePickerEl = document.getElementById("datepicker");
   if (datePickerEl) datePickerEl.classList.add("hidden");
 }
@@ -110,31 +140,41 @@ function showAdminDashboard() {
   const bookingsList = document.getElementById("admin-bookings");
 
   if (userList) {
-    const userListHTML = "<h4>Users:</h4><ul>" +
-      Object.keys(users).map(user => {
-        const u = users[user];
-        const remaining = u.haircuts - u.used;
-        return `<li><strong>${user}</strong> - ${remaining}/${u.haircuts} cuts remaining, Next: ${u.nextBooking || 'None'}</li>`;
-      }).join('') + "</ul>";
+    const userListHTML =
+      "<h4>Users:</h4><ul>" +
+      Object.keys(users)
+        .map((user) => {
+          const u = users[user];
+          const remaining = u.haircuts - u.used;
+          return `<li><strong>${user}</strong> - ${remaining}/${u.haircuts} cuts remaining, Next: ${
+            u.nextBooking || "None"
+          }</li>`;
+        })
+        .join("") +
+      "</ul>";
     userList.innerHTML = userListHTML;
   }
 
   if (bookingsList) {
     const allBookings = Object.keys(users)
-      .filter(user => users[user].nextBooking)
-      .map(user => ({ user: user, date: users[user].nextBooking }))
+      .filter((user) => users[user].nextBooking)
+      .map((user) => ({ user: user, date: users[user].nextBooking }))
       .sort((a, b) => new Date(a.date) - new Date(b.date));
 
-    const bookingsHTML = "<h4>Upcoming Bookings:</h4>" +
+    const bookingsHTML =
+      "<h4>Upcoming Bookings:</h4>" +
       (allBookings.length > 0
-        ? "<ul>" + allBookings.map(booking =>
-          `<li>${booking.user} - ${booking.date}</li>`).join('') + "</ul>"
+        ? "<ul>" +
+          allBookings
+            .map((booking) => `<li>${booking.user} - ${booking.date}</li>`)
+            .join("") +
+          "</ul>"
         : "<p>No upcoming bookings</p>");
     bookingsList.innerHTML = bookingsHTML;
   }
 }
 
-// ✅ FIXED openDatePicker
+// ==== DATE PICKER & BOOKING ====
 function openDatePicker() {
   const datePickerEl = document.getElementById("datepicker");
   if (!datePickerEl) return;
@@ -143,23 +183,74 @@ function openDatePicker() {
   datePickerEl.focus();
 
   if (pickerInstance) {
-    pickerInstance.destroy(); // prevent multiple pickers
+    pickerInstance.destroy();
   }
 
   pickerInstance = flatpickr("#datepicker", {
     minDate: "today",
     dateFormat: "Y-m-d",
-    onChange: function (selectedDates, dateStr, instance) {
+    onChange: function (selectedDates, dateStr) {
       if (dateStr && loggedInUser && users[loggedInUser]) {
         users[loggedInUser].nextBooking = dateStr;
+        localStorage.setItem(`booking_${loggedInUser}`, dateStr);
         document.getElementById("next-date").innerText = dateStr;
-        datePickerEl.classList.add("hidden");
         alert("Booking confirmed for " + dateStr);
+
+        datePickerEl.classList.add("hidden");
+
+        sendBookingEmail(loggedInUser, dateStr);
       }
-    }
+    },
   });
 }
 
+// ==== EMAIL FUNCTIONS ====
+function sendBookingEmail(user, date) {
+  const emailParams = {
+    user_name: user,
+    booking_date: date,
+    to_email: "admin@elvisdesigns.co.za", // adjust if needed
+  };
+
+  emailjs
+    .send("service_y1pz564", "template_g96im7o", emailParams)
+    .then(() => {
+      alert("✅ Booking email sent!");
+    })
+    .catch((error) => {
+      alert("❌ Failed to send booking email. Check console.");
+      console.error("EmailJS error:", error);
+    });
+}
+
+function sendEmail() {
+  const nameInput = document.querySelector('input[name="user_name"]');
+  const emailInput = document.querySelector('input[name="user_email"]');
+  const messageInput = document.querySelector('textarea[name="message"]');
+
+  if (!nameInput || !emailInput || !messageInput) {
+    alert("Contact form inputs missing");
+    return;
+  }
+
+  const templateParams = {
+    user_name: nameInput.value,
+    user_email: emailInput.value,
+    message: messageInput.value,
+  };
+
+  emailjs
+    .send("service_y1pz564", "template_g96im7o", templateParams)
+    .then(() => {
+      alert("✅ Email sent successfully!");
+    })
+    .catch((error) => {
+      alert("❌ Failed to send email. Check console.");
+      console.error("EmailJS error:", error);
+    });
+}
+
+// ==== COUNTDOWN ====
 function startCountdown() {
   function updateCountdown() {
     const now = new Date();
@@ -167,12 +258,15 @@ function startCountdown() {
     const timeLeft = nextMonth - now;
 
     const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const hours = Math.floor(
+      (timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+    );
     const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
 
     const countdownElement = document.getElementById("reset-countdown");
     if (countdownElement) {
-      countdownElement.innerText = "Resets in: " + days + "d " + hours + "h " + minutes + "m";
+      countdownElement.innerText =
+        "Resets in: " + days + "d " + hours + "h " + minutes + "m";
     }
   }
 
@@ -180,23 +274,19 @@ function startCountdown() {
   setInterval(updateCountdown, 60000);
 }
 
+// ==== UTILS ====
 function addEnterKeySupport() {
   const usernameInput = document.getElementById("username");
   const passwordInput = document.getElementById("password");
 
   if (usernameInput) {
-    usernameInput.addEventListener('keypress', function (e) {
-      if (e.key === 'Enter') {
-        login();
-      }
+    usernameInput.addEventListener("keypress", function (e) {
+      if (e.key === "Enter") login();
     });
   }
-
   if (passwordInput) {
-    passwordInput.addEventListener('keypress', function (e) {
-      if (e.key === 'Enter') {
-        login();
-      }
+    passwordInput.addEventListener("keypress", function (e) {
+      if (e.key === "Enter") login();
     });
   }
 }
@@ -208,7 +298,3 @@ function clearDashboardContent() {
   if (userList) userList.innerHTML = "";
   if (bookingsList) bookingsList.innerHTML = "";
 }
-
-
-
-
