@@ -40,11 +40,18 @@
     }
 
     .gallery-item img:hover {
-      transform: scale(1.05); /* Zoom in on hover */
+      transform: scale(1.05);
     }
 
     .gallery-item.clicked img {
-      transform: scale(0.9); /* Zoom out on click */
+      transform: scale(0.9);
+    }
+
+    .gallery-item img.zoomed {
+      transform: scale(2);
+      transition: transform 0.3s ease;
+      z-index: 10;
+      position: relative;
     }
 
     .info-box {
@@ -87,7 +94,7 @@
       <div class="info-box">
         <h3>Mid Fade</h3>
         <p>Balanced mid fade with a smooth blend and texture.</p>
-        <P>Price - R120</P>
+        <p>Price - R120</p>
       </div>
     </div>
 
@@ -99,22 +106,59 @@
         <p>Price - R120</p>
       </div>
     </div>
+
+    <div class="gallery-item" onclick="toggleInfo(this)">
+      <img src="images/cut13.jpg" alt="Brush Fade">
+      <div class="info-box">
+        <h3>Brush Fade</h3>
+        <p>Balanced brush fade with a smooth blend and texture.</p>
+        <p>Price - R150</p>
+      </div>
+    </div>
+
+    <div class="gallery-item" onclick="toggleInfo(this)">
+      <img src="images/cut14.jpg" alt="Mid Fade">
+      <div class="info-box">
+        <h3>Mid Fade</h3>
+        <p>Hightop mid fade with a smooth blend and texture.</p>
+        <p>Price - R120</p>
+      </div>
+    </div>
+
+    <div class="gallery-item" onclick="toggleInfo(this)">
+      <img src="images/cut15.jpg" alt="Tapper Fade">
+      <div class="info-box">
+        <h3>Tapper Fade</h3>
+        <p>Tapper fade with a smooth blend and texture.</p>
+        <p>Price - R120</p>
+      </div>
+    </div>
+
+    <div class="gallery-item" onclick="toggleInfo(this)">
+      <img src="images/cut16.jpg" alt="Tapper Fade">
+      <div class="info-box">
+        <h3>Tapper Fade</h3>
+        <p>Tapper fade with a smooth blend and texture.</p>
+        <p>Price - R120</p>
+      </div>
+    </div>
   </div>
 
+  <!-- Info toggle script -->
   <script>
     function toggleInfo(element) {
-      // First remove 'clicked' class and hide info from all items
       document.querySelectorAll('.gallery-item').forEach(item => {
         item.classList.remove('clicked');
         item.querySelector('.info-box').style.display = 'none';
       });
 
-      // Then show info on the clicked one
       element.classList.add('clicked');
       const infoBox = element.querySelector('.info-box');
       infoBox.style.display = 'block';
     }
   </script>
 
+  <!-- ✅ Link to your external JS file -->
+  <script src="script.js"></script>
 </body>
 </html>
