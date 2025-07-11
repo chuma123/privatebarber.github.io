@@ -7,6 +7,7 @@ const users = {
   themba: { password: "9333", haircuts: 5, used: 0, nextBooking: null },
   daryl: { password: "6921", haircuts: 4, used: 1, nextBooking: null },
   mj: { password: "5434", haircuts: 8, used: 2, nextBooking: null },
+  tali: {password: "5434", haircuts: 4,used: 1, nextBooking: null },
 };
 const adminPassword = "12314";
 
@@ -298,3 +299,28 @@ function clearDashboardContent() {
   if (userList) userList.innerHTML = "";
   if (bookingsList) bookingsList.innerHTML = "";
 }
+// ==== GALLERY DOUBLE-TAP ZOOM ====
+document.addEventListener("DOMContentLoaded", function () {
+  let lastTap = 0;
+
+  document.querySelectorAll('.gallery-item img').forEach(img => {
+    img.addEventListener('touchend', function () {
+      const currentTime = new Date().getTime();
+      const tapLength = currentTime - lastTap;
+
+      if (tapLength < 300 && tapLength > 0) {
+        this.classList.toggle('zoomed');
+      }
+
+      lastTap = currentTime;
+    });
+
+    img.addEventListener('touchstart', function () {
+      document.querySelectorAll('.gallery-item img').forEach(otherImg => {
+        if (otherImg !== this) {
+          otherImg.classList.remove('zoomed');
+        }
+      });
+    });
+  });
+});
