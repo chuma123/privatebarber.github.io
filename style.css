@@ -1,7 +1,7 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background-color: #01491f;
+  background-color: #000000;
   color: #fff;
   display: flex;
   flex-direction: column;
@@ -59,7 +59,7 @@ button {
 .nav-bar {
   display: flex;
   justify-content: space-around;
-  background: #d3f90c;
+  background: #ffffff;
   padding: 10px 0;
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
@@ -76,6 +76,12 @@ button {
   color: #355e00;
 }
 
+.gallery-item img.zoomed {
+  transform: scale(2); /* Adjust zoom level here */
+  transition: transform 0.3s ease;
+  z-index: 10;
+  position: relative;
+}
 
 
 
