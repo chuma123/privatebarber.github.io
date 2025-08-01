@@ -8,7 +8,7 @@ const users = {
   daryl: { password: "6921", haircuts: 4, used: 2, nextBooking: null },
   mj: { password: "5434", haircuts: 8, used: 8, nextBooking: null },
   kiid: {password: "1385", haircuts: 4,used: 3, nextBooking: null },
-  tkay: {password: "9083", haircuts: 4,used: 1, nextBooking: null},
+  tkay: {password: "9083", haircuts: 4,used: 1, nextBooking: null },
   
 };
 const adminPassword = "12314";
