@@ -1,14 +1,14 @@
 // ==== CONFIG ====
 const users = {
   luvo: { password: "3430", haircuts: 4, used: 2, nextBooking: null },
-  peter: { password: "6882", haircuts: 4, used: 1, nextBooking: null },
-  lesego: { password: "5820", haircuts: 4, used: 2, nextBooking: null },
+  peter: { password: "6882", haircuts: 4, used: 3, nextBooking: null },
+  lesego: { password: "5820", haircuts: 4, used: 3, nextBooking: null },
   mac: { password: "4692", haircuts: 4, used: 2, nextBooking: null },
-  themba: { password: "9333", haircuts: 5, used: 5, nextBooking: null },
+  themba: { password: "9333", haircuts: 5, used: 3, nextBooking: null },
   daryl: { password: "6921", haircuts: 4, used: 3, nextBooking: null },
   mj: { password: "5434", haircuts: 8, used: 4, nextBooking: null },
   kiid: {password: "1385", haircuts: 4,used: 4, nextBooking: null },
-  tkay: {password: "9083", haircuts: 4,used: 1, nextBooking: null },
+  tkay: {password: "9083", haircuts: 4,used: 2, nextBooking: null },
   
 };
 const adminPassword = "12314";
