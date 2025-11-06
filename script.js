@@ -1,7 +1,6 @@
 // ==== CONFIG ====
 const users = {
   luvo: { password: "3430", haircuts: 4, used: 1, nextBooking: null },
-  
   lesego: { password: "5820", haircuts: 4, used: 1, nextBooking: null },
   mac: { password: "4692", haircuts: 4, used: 0, nextBooking: null },
   themba: { password: "9333", haircuts: 5, used: 0, nextBooking: null },
